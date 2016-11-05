@@ -29,4 +29,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
      // Gson
     compile 'com.google.code.gson:gson:2.2.4'
+    
+    // jsoup HTML parser library @ http://jsoup.org/
+	compile 'org.jsoup:jsoup:1.10.1'
+	
+	//apache for http client
+	compile 'org.apache.httpcomponents:httpclient:4.4-alpha1'
 }
