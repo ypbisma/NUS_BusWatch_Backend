@@ -25,9 +25,9 @@ public class LoginManager {
 	public LoginManager(String loginUrl){
 		this.loginUrl = loginUrl;
 		this.loginCred = new LoginCredentials();
-		this.loginCred.setDomain(this.domain);
-		this.loginCred.setName(this.username);
-		this.loginCred.setPassword(this.password);
+		this.loginCred.setDomain(LoginManager.domain);
+		this.loginCred.setName(LoginManager.username);
+		this.loginCred.setPassword(LoginManager.password);
 	}
 	
 	public void login() throws Exception{

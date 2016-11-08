@@ -1,12 +1,6 @@
 package com.buswatchbackend;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.UnknownHostException;
-
 
 import com.google.gson.Gson;
 
@@ -19,94 +13,54 @@ public class BusApiConnector
 	private BusInfo[] busInfoList;
 	private static String token;
 	
-	public static void main (String[] args) throws Exception{
+	public static void main (String[] args) throws Exception {
+		try{
 		BusApiConnector apiConnector = new BusApiConnector();
 		LoginManager loginManager = new LoginManager(API_URL+LOGIN_BRANCH);
-		//apiConnector.login();
+		
+		//login and obtain token
 		loginManager.login();
 		token = loginManager.getToken();
-		apiConnector.populateList();
+		
+		//feed token to get BusInfo
+		BusInfoManager busInfoManager = new BusInfoManager(API_URL+VENIAM_BRANCH+token);
+		busInfoManager.syncBusInfo();
+		
+		
+		apiConnector.populateList(busInfoManager.getBusInfo());
 		apiConnector.printBusInfoList();
 		//databaseConnector.save(test);
+		}
+		//when there is no internet connection
+		catch(UnknownHostException e){
+			System.out.println("No connection dude!");
+		}
 	}
 	
 	
-	public void populateList () {
+	public void populateList (String results) {
 		try
 		{
-			String query = API_URL+VENIAM_BRANCH+token;
-			String results = getInfoFromApi(query);
 
 			Gson gson = new Gson();
 			this.busInfoList = gson.fromJson(results, BusInfo[].class);
 		}
-		catch (UnknownHostException e) {
-			System.out.println("No connection dude!");
-		}	
 		catch (Exception e){
 			e.printStackTrace();
 		} 
 	}
 
 
-private String getInfoFromApi(String desiredUrl)
-throws Exception
-{
-	URL url = null;
-	BufferedReader reader = null;
-	StringBuilder stringBuilder;
-	try
-	{
-		url = new URL(desiredUrl);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod("GET");
-		connection.setDoOutput(true);
-
-		connection.setReadTimeout(15*1000);
-		connection.connect();
-
-		reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      	stringBuilder = new StringBuilder();
-
-      	String line = null;
-      	while((line = reader.readLine()) != null)
-      	{
-      		stringBuilder.append(line + "\n");
-
-      	}
-      	return stringBuilder.toString();
-   
-	}
-	catch (Exception e)
-	{
-		e.printStackTrace();
-		throw e;
-	}
-	finally
-	{
-		if(reader!= null)
-		{
-			try
-			{
-				reader.close();
-			}
-			catch(IOException ioe)
-			{
-				ioe.printStackTrace();
-				}
-			}
-		}
-	}
-
 private void printBusInfoList(){
 	String output;
 	for (BusInfo busInfo : this.busInfoList) {
-		//if(busInfo.getNodeId()==2052) {
+		if(busInfo.getNodeId()==2027) {
 			output = busInfo.getNodeId().toString() + " " 
 					+ busInfo.getLatitude().toString() + " "
-					+ busInfo.getLongitude().toString();
+					+ busInfo.getLongitude().toString() + " "
+					+ busInfo.getSpeed().toString();
 			System.out.println(output);
-	//}
+	}
 			}
 	}
 }
