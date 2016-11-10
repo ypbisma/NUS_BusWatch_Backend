@@ -22,9 +22,13 @@ public class BusApiConnector
 				}
 			}
 		}
-		catch(Exception e){
-			System.out.println(e);
+		catch(NullPointerException e){
+			System.out.println("array is empty!");
 		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+
 	}
 }
 

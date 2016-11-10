@@ -4,17 +4,13 @@ import java.util.Vector;
 
 public class JobBusSession {
 	
-	private String token;
 	private Integer busNumber;
 	private BusSessionManager busSessionManager;
 	private Vector<BusSession> desiredBusSessionList = new Vector<BusSession>();
 
 	
-	public JobBusSession(Integer busNumber)throws Exception{
-		//login and obtain token
-		LoginManager loginManager = new LoginManager();
-		loginManager.login();
-		token = loginManager.getToken();
+	public JobBusSession(Integer busNumber, String token)throws Exception{
+		
 		busSessionManager = new BusSessionManager(token);
 		
 		this.busNumber = busNumber;
@@ -33,10 +29,10 @@ public class JobBusSession {
 		
 		for (BusSession busSession : busSessionList) {
 			int localBusNumber = busNumber;
-			output = busSession.getGwId().toString() + " \t"  
-					+ busSession.getMacHash().toString() + " \t"
-					+ busSession.getLatitudeBegin().toString() + " \t"
-					+ busSession.getLongitudeBegin().toString();
+//			output = busSession.getGwId().toString() + " \t"  
+//					+ busSession.getMacHash().toString() + " \t"
+//					+ busSession.getLatitudeBegin().toString() + " \t"
+//					+ busSession.getLongitudeBegin().toString();
 			
 			if(busSession.getGwId()==localBusNumber) {
 				lastBusSession = busSession;
@@ -45,14 +41,14 @@ public class JobBusSession {
 			
 			desiredBusSessionList.add(lastBusSession);
 			
-//			for(BusSession e : desiredBusSessionList){
-//				output = e.getGwId().toString() + " \t"  
-//						+ e.getMacHash().toString() + " \t"
-//						+ e.getLatitudeBegin().toString() + " \t"
-//						+ e.getLongitudeBegin().toString();
-//					
-//				System.out.println(output);
-//			}
+			for(BusSession e : desiredBusSessionList){
+				output = e.getGwId().toString() + " \t"  
+						+ e.getMacHash().toString() + " \t"
+						+ e.getLatitudeBegin().toString() + " \t"
+						+ e.getLongitudeBegin().toString();
+					
+				System.out.println(output);
+			}
 		}
 }
 

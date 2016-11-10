@@ -8,22 +8,37 @@ public class ScheduledTask extends TimerTask {
 
 	Date now; // to display current time
 	Integer busNumber = 2028;
-	// Add your task here
+	String token;
+	
 	public void run(){
 		try{
+			
+		//login and obtain token
+		LoginManager loginManager = new LoginManager();
+		loginManager.login();
+		token = loginManager.getToken();
+		
 		now = new Date(); // initialize date
 		System.out.println("Time is :" + now); // Display current time
-		JobBusLocation jobBusLocation = new JobBusLocation(busNumber);
-		JobBusSession jobBusSession = new JobBusSession(busNumber);
+		JobBusLocation jobBusLocation = new JobBusLocation(busNumber, token);
+		JobBusSession jobBusSession = new JobBusSession(busNumber, token);
+		JobMacAddressLocation jobMacAddressLocation = new JobMacAddressLocation(token);
 		
 		jobBusLocation.execute();
 		jobBusSession.execute();
+		//jobMacAddressLocation.execute();
+		System.out.println(token);
+
 		}
-		catch(Exception e){
+		catch(NullPointerException e){
 			System.out.println(e);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		finally{
 			//
 		}
 	}
+	
+	//open http://www.darrinward.com/lat-long/?id=2400046 for longitude langitude plot
 }

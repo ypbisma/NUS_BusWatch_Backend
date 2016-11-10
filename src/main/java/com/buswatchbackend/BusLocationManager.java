@@ -2,6 +2,7 @@ package com.buswatchbackend;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -24,6 +25,7 @@ public class BusLocationManager {
 	}
 	
 	public void syncBusInfo() throws Exception{
+		try{
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(this.busLocationUrl);
 		
@@ -45,6 +47,13 @@ public class BusLocationManager {
 		Gson gson = new Gson();
 			this.setBusLocationList(gson.fromJson(result.toString(), BusLocation[].class));
 	}
+	catch(UnknownHostException e){
+		System.out.println("no internet connection!");
+	}
+	catch(Exception e){
+		e.printStackTrace();
+	}
+}
 
 	//setters and getters
 	public void setBusInfo(String busInfo) {

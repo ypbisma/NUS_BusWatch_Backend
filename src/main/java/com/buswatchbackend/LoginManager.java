@@ -1,5 +1,7 @@
 package com.buswatchbackend;
 
+import java.net.UnknownHostException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -52,8 +54,8 @@ public class LoginManager {
 		this.loginRes = gson.fromJson(output, LoginResponse.class);
 		this.setToken(loginRes.getToken());
 		}
-		finally{
-			//
+		catch(UnknownHostException e){
+			System.out.println("no internet connection!");
 		}
 	}
 

@@ -9,7 +9,7 @@ public class JobBusLocation {
 	private Vector<BusLocation> desiredBusLocationList = new Vector<BusLocation>();
 
 	
-	public JobBusLocation(Integer inputBusNumber) throws Exception{
+	public JobBusLocation(Integer inputBusNumber, String token) throws Exception{
 		busNumber = inputBusNumber;
 		
 		//feed token to get BusInfo
@@ -21,9 +21,9 @@ public class JobBusLocation {
 	
 	public void execute() throws Exception{
 		
-	busLocationManager.syncBusInfo();
+		busLocationManager.syncBusInfo();
 		
-	printBusInfoList(busLocationManager.getBusLocationList());
+		printBusInfoList(busLocationManager.getBusLocationList());
 	}
 	
 	public void printBusInfoList(BusLocation[] busInfoList){
