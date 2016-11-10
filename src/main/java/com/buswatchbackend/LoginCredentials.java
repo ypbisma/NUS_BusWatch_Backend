@@ -5,6 +5,8 @@ public class LoginCredentials {
 	private String domain;
 	private String name;
 	private String password;
+	
+	//setters and getters
 	public String getDomain() {
 		return domain;
 	}

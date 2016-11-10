@@ -11,6 +11,8 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 
 public class LoginManager {
+	private static final String API_URL = "https://api.ami-lab.org";
+	private static final String LOGIN_BRANCH = "/api/v1/user/login";
 	private static final String domain = "nusstu";
 	private static final String username = "A0115902";
 	private static final String password = "Password@41";
@@ -22,8 +24,8 @@ public class LoginManager {
 	private LoginResponse loginRes;
 
 	
-	public LoginManager(String loginUrl){
-		this.loginUrl = loginUrl;
+	public LoginManager(){
+		this.loginUrl = API_URL + LOGIN_BRANCH;
 		this.loginCred = new LoginCredentials();
 		this.loginCred.setDomain(LoginManager.domain);
 		this.loginCred.setName(LoginManager.username);

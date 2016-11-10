@@ -2,7 +2,7 @@ package com.buswatchbackend;
 
 import com.google.gson.annotations.SerializedName;
 
-public class BusInfo {
+public class BusLocation {
 	
 	@SerializedName("node_id")
 	private Integer nodeId;
@@ -19,9 +19,12 @@ public class BusInfo {
 	
 	private Integer speed;
 	private Double heading;
+	
 	public Integer getNodeId() {
 		return nodeId;
 	}
+	
+	//setters and getters
 	public void setNodeId(Integer nodeId) {
 		this.nodeId = nodeId;
 	}
