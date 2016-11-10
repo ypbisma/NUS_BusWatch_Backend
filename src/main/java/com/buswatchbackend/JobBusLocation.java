@@ -27,10 +27,8 @@ public class JobBusLocation {
 	}
 	
 	public void printBusInfoList(BusLocation[] busInfoList){
-		String output;
-		String secondOutput;
+		String Output;
 
-		BusLocation desiredBusLocation = new BusLocation();
 		BusLocation lastBusLocation = new BusLocation();
 		
 		for (BusLocation busLocation : busInfoList) {
@@ -41,20 +39,18 @@ public class JobBusLocation {
 			}
 
 		}
-		desiredBusLocation = lastBusLocation;
-
 		
-		desiredBusLocationList.add(desiredBusLocation);
+		desiredBusLocationList.add(lastBusLocation);
 		
 		for(BusLocation e : desiredBusLocationList){
-			secondOutput = e.getNodeId().toString() + " \t" 
+			Output = e.getNodeId().toString() + " \t" 
 					+ e.getVehicleSerial().toString() + " \t"
 					+ e.getLatitude().toString() + " \t"
 					+ e.getLongitude().toString() + " \t"
 					+ e.getSpeed().toString()+ "\t"
 					+ e.getGpsTime();
 				
-			System.out.println(secondOutput);
+			System.out.println(Output);
 		}
 		}
 }
