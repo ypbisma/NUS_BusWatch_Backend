@@ -7,7 +7,7 @@ public class JobBusLocation {
 	private static Integer busNumber;
 	private BusLocationManager busLocationManager;
 	private Vector<BusLocation> desiredBusLocationList = new Vector<BusLocation>();
-
+	private String output;
 	
 	public JobBusLocation(Integer inputBusNumber, String token) throws Exception{
 		busNumber = inputBusNumber;
@@ -33,6 +33,12 @@ public class JobBusLocation {
 		
 		for (BusLocation busLocation : busInfoList) {
 			int localBusNumber = busNumber;
+//			output = busLocation.getNodeId().toString() + " \t"  
+//					+ busLocation.getSpeed().toString() + " \t"
+//					+ busLocation.getLatitude().toString() + " \t"
+//					+ busLocation.getLongitude().toString();
+//			System.out.println(output);
+
 			
 			if(busLocation.getNodeId()==localBusNumber) {
 				lastBusLocation = busLocation;

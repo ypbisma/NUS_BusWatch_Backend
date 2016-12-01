@@ -7,7 +7,7 @@ import java.util.Date;
 public class ScheduledTask extends TimerTask {
 
 	Date now; // to display current time
-	Integer busNumber = 2028;
+	Integer busNumber = 2050;
 	String token;
 	
 	public void run(){
@@ -19,19 +19,21 @@ public class ScheduledTask extends TimerTask {
 		token = loginManager.getToken();
 		
 		now = new Date(); // initialize date
-		System.out.println("Time is :" + now); // Display current time
+		String timeNow = "Time is: " + now;
+		System.out.println(timeNow); // Display current time
+		
 		JobBusLocation jobBusLocation = new JobBusLocation(busNumber, token);
 		JobBusSession jobBusSession = new JobBusSession(busNumber, token);
 		JobMacAddressLocation jobMacAddressLocation = new JobMacAddressLocation(token);
 		
-		jobBusLocation.execute();
-		jobBusSession.execute();
-		//jobMacAddressLocation.execute();
+		//jobBusLocation.execute();
+		//jobBusSession.execute();
+		jobMacAddressLocation.execute();
 		System.out.println(token);
 
 		}
 		catch(NullPointerException e){
-			System.out.println(e);
+			System.out.println("Data does not exist");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
