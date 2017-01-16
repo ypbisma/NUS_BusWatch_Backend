@@ -9,8 +9,8 @@ import java.util.Date;
 public class JobMacAddressLocation {
 	private MacAddressLocationManager macAddressLocationManager;
 	private Date now;
+	private DatabaseWriter macAddressLocationWriter = new DatabaseWriter();
 	public JobMacAddressLocation(String token) throws Exception{
-		
 		macAddressLocationManager = new MacAddressLocationManager(token);	
 	}
 	
@@ -22,25 +22,33 @@ public class JobMacAddressLocation {
 				+ desiredLocation.getGeoCoordinate().getLongitude();
 		System.out.println(locationInformation);
 		
-		//read old file
-		StringBuilder sb = new StringBuilder();
-		BufferedReader br = new BufferedReader(new FileReader("location_tracker.txt"));
-		String line = br.readLine();
+		macAddressLocationWriter.insertMacAddressLocation(MacAddressLocationManager.getMacaddress(),
+				desiredLocation.getGeoCoordinate().getLatitude().toString(),
+				desiredLocation.getGeoCoordinate().getLongitude().toString(),
+				desiredLocation.getFloor());
 		
-		while (line!=null){
-			sb.append(line);
-			sb.append(System.lineSeparator());
-			line = br.readLine();
-		}
-		String previousLines = sb.toString();
-		br.close();
 		
-		//write new file
-		now = new Date();
-		String timeNow = "Time is: " + now;
-
-		PrintWriter outputfile = new PrintWriter("location_tracker.txt");
-	    outputfile.print(previousLines + "\n"+ timeNow + "\n" + locationInformation + "\n");
-	    outputfile.close();
+		
+//		
+//		//read old file
+//		StringBuilder sb = new StringBuilder();
+//		BufferedReader br = new BufferedReader(new FileReader("location_tracker.txt"));
+//		String line = br.readLine();
+//		
+//		while (line!=null){
+//			sb.append(line);
+//			sb.append(System.lineSeparator());
+//			line = br.readLine();
+//		}
+//		String previousLines = sb.toString();
+//		br.close();
+//		
+//		//write new file
+//		now = new Date();
+//		String timeNow = "Time is: " + now;
+//
+//		PrintWriter outputfile = new PrintWriter("location_tracker.txt");
+//	    outputfile.print(previousLines + "\n"+ timeNow + "\n" + locationInformation + "\n");
+//	    outputfile.close();
 	}
 }

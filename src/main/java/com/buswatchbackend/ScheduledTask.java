@@ -7,7 +7,7 @@ import java.util.Date;
 public class ScheduledTask extends TimerTask {
 
 	Date now; // to display current time
-	Integer busNumber = 2050;
+	Integer busNumber = 2075																																																																																																																																																																																																	;
 	String token;
 	
 	public void run(){
@@ -26,11 +26,11 @@ public class ScheduledTask extends TimerTask {
 		JobBusSession jobBusSession = new JobBusSession(busNumber, token);
 		JobMacAddressLocation jobMacAddressLocation = new JobMacAddressLocation(token);
 		
-		//jobBusLocation.execute();
+		jobBusLocation.execute();
 		//jobBusSession.execute();
 		jobMacAddressLocation.execute();
 		System.out.println(token);
-
+		
 		}
 		catch(NullPointerException e){
 			System.out.println("Data does not exist");
@@ -42,5 +42,5 @@ public class ScheduledTask extends TimerTask {
 		}
 	}
 	
-	//open http://www.darrinward.com/lat-long/?id=2400046 for longitude langitude plot
+	//open http://www.darrinward.com/lat-long/?id=2400046 for longitude latitude plot
 }

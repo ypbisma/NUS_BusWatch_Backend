@@ -8,6 +8,8 @@ public class JobBusLocation {
 	private BusLocationManager busLocationManager;
 	private Vector<BusLocation> desiredBusLocationList = new Vector<BusLocation>();
 	private String output;
+	private DatabaseWriter busLocationWriter = new DatabaseWriter();
+
 	
 	public JobBusLocation(Integer inputBusNumber, String token) throws Exception{
 		busNumber = inputBusNumber;
@@ -23,27 +25,21 @@ public class JobBusLocation {
 		
 		busLocationManager.syncBusInfo();
 		
-		printBusInfoList(busLocationManager.getBusLocationList());
+		writeBusInfoList(busLocationManager.getBusLocationList());
+		
+		// 1. Establish database connection
+		// 2. Write busLocationList to database
+		// 3. Close database connection
 	}
 	
-	public void printBusInfoList(BusLocation[] busInfoList){
+	public void writeBusInfoList(BusLocation[] busInfoList){
 		String Output;
 
 		BusLocation lastBusLocation = new BusLocation();
 		
 		for (BusLocation busLocation : busInfoList) {
 			int localBusNumber = busNumber;
-//			output = busLocation.getNodeId().toString() + " \t"  
-//					+ busLocation.getSpeed().toString() + " \t"
-//					+ busLocation.getLatitude().toString() + " \t"
-//					+ busLocation.getLongitude().toString();
-//			System.out.println(output);
-
-			
-			if(busLocation.getNodeId()==localBusNumber) {
 				lastBusLocation = busLocation;
-			}
-
 		}
 		
 		desiredBusLocationList.add(lastBusLocation);
@@ -54,11 +50,16 @@ public class JobBusLocation {
 					+ e.getLatitude().toString() + " \t"
 					+ e.getLongitude().toString() + " \t"
 					+ e.getSpeed().toString()+ "\t"
+					+ e.getHeading().toString()+ "\t"
 					+ e.getGpsTime();
 				
 			System.out.println(Output);
+			
+			busLocationWriter.insertBusInformation(e.getNodeId().toString(), 
+					e.getGpsTime().toString(), e.getLatitude().toString(), 
+					e.getLongitude().toString(), e.getHeading().toString());
 		}
-		}
+	}
 }
 	
 
