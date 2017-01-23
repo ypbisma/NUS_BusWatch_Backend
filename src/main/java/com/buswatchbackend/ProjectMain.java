@@ -1,7 +1,6 @@
 package com.buswatchbackend;
 
-import java.io.PrintWriter;
-import java.util.Timer;
+
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -36,9 +35,7 @@ public class ProjectMain
 			  
 			  // Tell quartz to schedule the job using our trigger
 			  scheduler.scheduleJob(job, trigger);
-			  
 			 
-
 			  // and start it off
 			  scheduler.start();
 			      
