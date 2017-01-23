@@ -1,7 +1,6 @@
 package com.buswatchbackend;
 
 import java.util.Date;
-
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -23,7 +22,7 @@ public class ScheduledJob implements org.quartz.Job {
 		
 		now = new Date(); // initialize date
 		String timeNow = "Time is: " + now;
-		System.out.println(timeNow); // Display current time
+		//System.out.println(timeNow); // Display current time
 		
 		JobBusLocation jobBusLocation = new JobBusLocation(busNumber, token);
 		JobBusSession jobBusSession = new JobBusSession(busNumber, token);
@@ -32,7 +31,7 @@ public class ScheduledJob implements org.quartz.Job {
 		jobBusLocation.execute();
 		//jobBusSession.execute();
 		jobMacAddressLocation.execute();
-		System.out.println(token);
+		//System.out.println(token);
 		
 		}
 		catch(NullPointerException e){
