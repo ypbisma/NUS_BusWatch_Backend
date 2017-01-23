@@ -59,47 +59,42 @@ public class DatabaseWriter {
 	 }
 	 
 	 public void insertLastBusInformation(String nodeId, String vehicleSerial, String gpsTime, String latitude, String longitude, String heading){
-		 String sql = "INSERT INTO LastBusInformation (nodeId, vehicleSerial, gpsTime, latitude, longitude, heading)"
+		 String updateSql = "UPDATE LastBusInformation set gpsTime = ?, latitude = ?, longitude = ?, heading = ? where nodeId = ?";
+		 String insertSql = "INSERT INTO LastBusInformation (nodeId, vehicleSerial, gpsTime, latitude, longitude, heading)"
 	        		+ " VALUES(?,?,?,?,?,?)";
+		 String selectSql = "Select count(*) from LastBusInformation WHERE nodeId = ?";
 		 
-		 
-	        try (Connection conn = this.connect();
-	           	PreparedStatement pstmt = conn.prepareStatement(sql);)
-	        {
-	        	pstmt.setString(1, nodeId);
-	        	pstmt.setString(2, vehicleSerial);
-	        	pstmt.setString(3, gpsTime);
-	        	pstmt.setString(4, latitude);
-	        	pstmt.setString(5, longitude);
-	        	pstmt.setString(6, heading);
-	        	pstmt.executeUpdate();
-	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
-	        }
-		 
-		 
-		 System.out.println("here");
-		 String updateSql = "UPDATE LastBusInformation set gpsTime = ?, latitude = ? where nodeId = ?";
-		 String querySql = "Select count(*) from LastBusInformation WHERE nodeId = ?";
 		 try(Connection conn = this.connect();
-				 PreparedStatement pstmt = conn.prepareStatement(updateSql);
-				 PreparedStatement qstmt = conn.prepareStatement(querySql))
+				 PreparedStatement updateStatement = conn.prepareStatement(updateSql);
+				 PreparedStatement selectStatement = conn.prepareStatement(selectSql);
+				 PreparedStatement insertStatement = conn.prepareStatement(insertSql);)
 		  {
 			 int count = 0;
-			 qstmt.setString(1, "2021");
-			 ResultSet resultSet = qstmt.executeQuery();
+			 selectStatement.setString(1, nodeId);
+			 ResultSet resultSet = selectStatement.executeQuery();
 			 if(resultSet.next()){
 				 count = resultSet.getInt(1);
 			 }
 			 
 			 if(count>0){
 				// set the preparedstatement parameters
-				 pstmt.setString(1,gpsTime);
-				 pstmt.setString(2,latitude);
-				 pstmt.setString(3, nodeId);
+				 updateStatement.setString(1,gpsTime);
+				 updateStatement.setString(2,latitude);
+				 updateStatement.setString(3, longitude);
+				 updateStatement.setString(4, heading);
+				 updateStatement.setString(5, nodeId);
 			    // call executeUpdate to execute our sql update statement
-			    pstmt.executeUpdate();
-			    pstmt.close();
+			    updateStatement.executeUpdate();
+			    updateStatement.close();
+			 }
+			 else {
+				insertStatement.setString(1, nodeId);
+		        insertStatement.setString(2, vehicleSerial);
+		        insertStatement.setString(3, gpsTime);
+		        insertStatement.setString(4, latitude);
+		        insertStatement.setString(5, longitude);
+		        insertStatement.setString(6, heading);
+		        insertStatement.executeUpdate();
 			 }
 		  }
 		 catch (Exception e){
