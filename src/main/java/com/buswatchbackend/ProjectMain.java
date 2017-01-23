@@ -2,7 +2,14 @@ package com.buswatchbackend;
 
 import java.io.PrintWriter;
 import java.util.Timer;
-
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.impl.StdSchedulerFactory;
+import static org.quartz.JobBuilder.*;
+import static org.quartz.TriggerBuilder.*;
+import static org.quartz.SimpleScheduleBuilder.*;
 
 public class ProjectMain	
 {	
@@ -10,23 +17,32 @@ public class ProjectMain
 	
 	public static void main (String[] args) throws Exception {
 		try{
-			//Initialise text file
-			PrintWriter writer = new PrintWriter("location_tracker.txt");
-			writer.print("");
-			writer.close();
-			
-			//Timer time = new Timer(); // Instantiate Timer Object
-			ScheduledTask st = new ScheduledTask(); // Instantiate ScheduledTask class
-			st.run();
-			//time.schedule(st, 0, 500); // Create Repetitively task for every 1 secs
+			 // Grab the Scheduler instance from the Factory
+			  Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+			  
+			 // define the job and tie it to our MyJob class
+			  JobDetail job = newJob(ScheduledJob.class)
+			      .withIdentity("job1", "group1")
+			      .build();
 
-//			for (int i = 0; i <= 1000000000; i++) {
-//				Thread.sleep(1000);
-//				if (i == 1000) {
-//					System.out.println("Application Terminates");
-//					System.exit(0);
-//				}
-//			}
+			  // Trigger the job to run now, and then repeat every 40 seconds
+			  Trigger trigger = newTrigger()
+			      .withIdentity("trigger1", "group1")
+			      .startNow()
+			      .withSchedule(simpleSchedule()
+			              .withIntervalInSeconds(1)
+			              .repeatForever())
+			      .build();
+			  
+			  // Tell quartz to schedule the job using our trigger
+			  scheduler.scheduleJob(job, trigger);
+			  
+			 
+
+			  // and start it off
+			  scheduler.start();
+			      
+			
 		}
 		catch(NullPointerException e){
 			System.out.println("array is empty!");
