@@ -101,5 +101,45 @@ public class DatabaseWriter {
 			 System.out.println(e.getMessage());
 		 }
 	 }
+	 
+	 public void insertLastMacAddressLocation(String macAddress, String latitude, String longitude, String floor){
+		 String insertSql = "INSERT INTO LastMacLocation (macAddress, latitude, longitude, floor)"
+	        		+ " VALUES(?,?,?,?)";
+		 String updateSql = "UPDATE LastMacLocation set latitude = ?, longitude = ?, floor = ? where macAddress = ?";
+		 String selectSql = "Select count(*) from LastMacLocation WHERE macAddress = ?";
+		 
+		 try(Connection conn = this.connect();
+				 PreparedStatement updateStatement = conn.prepareStatement(updateSql);
+				 PreparedStatement selectStatement = conn.prepareStatement(selectSql);
+				 PreparedStatement insertStatement = conn.prepareStatement(insertSql);)
+		 {
+			 int count = 0;
+			 selectStatement.setString(1, macAddress);
+			 ResultSet resultSet = selectStatement.executeQuery();
+			 if(resultSet.next()){
+				 count = resultSet.getInt(1);
+			 }
+			 System.out.println(count);
+			 if(count>0){
+				// set the preparedstatement parameters
+				 updateStatement.setString(1,latitude);
+				 updateStatement.setString(2,longitude);
+				 updateStatement.setString(3, floor);
+				 updateStatement.setString(4, macAddress);
+			 }
+			 else {
+				 insertStatement.setString(1, macAddress);
+				 insertStatement.setString(2, latitude);
+				 insertStatement.setString(3, longitude);
+				 insertStatement.setString(4, floor);
+			 }
+			 System.out.println(macAddress+latitude+longitude+floor);
+
+			 
+		 }
+		 catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	        }
+	 }
 }
 

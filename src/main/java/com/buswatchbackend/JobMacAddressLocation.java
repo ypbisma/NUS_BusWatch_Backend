@@ -22,6 +22,11 @@ public class JobMacAddressLocation {
 				desiredLocation.getGeoCoordinate().getLatitude().toString(),
 				desiredLocation.getGeoCoordinate().getLongitude().toString(),
 				desiredLocation.getFloor());
+		
+		macAddressLocationWriter.insertLastMacAddressLocation(MacAddressLocationManager.getMacaddress(),
+				desiredLocation.getGeoCoordinate().getLatitude().toString(),
+				desiredLocation.getGeoCoordinate().getLongitude().toString(),
+				desiredLocation.getFloor());
 	
 	}
 }

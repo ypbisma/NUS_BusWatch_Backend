@@ -55,10 +55,10 @@ public class JobBusLocation {
 				
 			System.out.println(Output);
 			
-//			busLocationWriter.insertBusInformation(e.getNodeId().toString(), 
-//					e.getVehicleSerial().toString(),
-//					e.getGpsTime().toString(), e.getLatitude().toString(), 
-//					e.getLongitude().toString(), e.getHeading().toString());
+			busLocationWriter.insertBusInformation(e.getNodeId().toString(), 
+					e.getVehicleSerial().toString(),
+					e.getGpsTime().toString(), e.getLatitude().toString(), 
+					e.getLongitude().toString(), e.getHeading().toString());
 			
 			busLocationWriter.insertLastBusInformation(e.getNodeId().toString(), 
 					e.getVehicleSerial().toString(),
