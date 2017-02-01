@@ -53,7 +53,7 @@ public class JobBusLocation {
 					+ e.getHeading().toString()+ "\t"
 					+ e.getGpsTime();
 				
-			System.out.println(Output);
+//			System.out.println(Output);
 			
 			busLocationWriter.insertBusInformation(e.getNodeId().toString(), 
 					e.getVehicleSerial().toString(),

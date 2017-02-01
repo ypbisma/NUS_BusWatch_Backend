@@ -16,7 +16,7 @@ public class JobMacAddressLocation {
 		String locationInformation = desiredLocation.getFloor() + "\t"
 				+ desiredLocation.getGeoCoordinate().getLatitude() + "\t"
 				+ desiredLocation.getGeoCoordinate().getLongitude();
-		System.out.println(locationInformation);
+//		System.out.println(locationInformation);
 		
 		macAddressLocationWriter.insertMacAddressLocation(MacAddressLocationManager.getMacaddress(),
 				desiredLocation.getGeoCoordinate().getLatitude().toString(),

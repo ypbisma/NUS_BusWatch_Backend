@@ -119,22 +119,21 @@ public class DatabaseWriter {
 			 if(resultSet.next()){
 				 count = resultSet.getInt(1);
 			 }
-			 System.out.println(count);
 			 if(count>0){
 				// set the preparedstatement parameters
 				 updateStatement.setString(1,latitude);
 				 updateStatement.setString(2,longitude);
 				 updateStatement.setString(3, floor);
 				 updateStatement.setString(4, macAddress);
+				 updateStatement.executeUpdate();
 			 }
 			 else {
 				 insertStatement.setString(1, macAddress);
 				 insertStatement.setString(2, latitude);
 				 insertStatement.setString(3, longitude);
 				 insertStatement.setString(4, floor);
+				 insertStatement.executeUpdate();
 			 }
-			 System.out.println(macAddress+latitude+longitude+floor);
-
 			 
 		 }
 		 catch (SQLException e) {
