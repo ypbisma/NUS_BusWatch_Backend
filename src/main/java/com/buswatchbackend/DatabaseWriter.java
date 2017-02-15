@@ -40,23 +40,6 @@ public class DatabaseWriter {
 	        }
 	    }
 	 
-	 public void insertMacAddressLocation(String macAddress, String latitude, String longitude, String floor){
-		 String sql = "INSERT INTO MacLocation (macAddress, latitude, longitude, floor)"
-	        		+ " VALUES(?,?,?,?)";
-		 
-		 try(Connection conn = this.connect();
-				 PreparedStatement pstmt = conn.prepareStatement(sql);)
-		{
-				pstmt.setString(1, macAddress);
-	        	pstmt.setString(2, latitude);
-	        	pstmt.setString(3, longitude);
-	        	pstmt.setString(4, floor);
-	        	pstmt.executeUpdate();
-		}
-		 catch (SQLException e) {
-	            System.out.println(e.getMessage());
-	        }
-	 }
 	 
 	 public void insertLastBusInformation(String nodeId, String vehicleSerial, String gpsTime, String latitude, String longitude, String heading){
 		 String updateSql = "UPDATE LastBusInformation set gpsTime = ?, latitude = ?, longitude = ?, heading = ? where nodeId = ?";
@@ -102,10 +85,31 @@ public class DatabaseWriter {
 		 }
 	 }
 	 
-	 public void insertLastMacAddressLocation(String macAddress, String latitude, String longitude, String floor){
-		 String insertSql = "INSERT INTO LastMacLocation (macAddress, latitude, longitude, floor)"
-	        		+ " VALUES(?,?,?,?)";
-		 String updateSql = "UPDATE LastMacLocation set latitude = ?, longitude = ?, floor = ? where macAddress = ?";
+	 public void insertMacAddressLocation(String macAddress, String latitude, String longitude, String zone, String building, String floor){
+		 String sql = "INSERT INTO MacLocation (macAddress, latitude, longitude, zone, building, floor)"
+	        		+ " VALUES(?,?,?,?,?,?)";
+		 
+		 try(Connection conn = this.connect();
+				 PreparedStatement pstmt = conn.prepareStatement(sql);)
+		{
+				pstmt.setString(1, macAddress);
+	        	pstmt.setString(2, latitude);
+	        	pstmt.setString(3, longitude);
+	        	pstmt.setString(4, zone);
+	        	pstmt.setString(5, building);
+	        	pstmt.setString(6, floor);
+	        	pstmt.executeUpdate();
+		}
+		 catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	        }
+	 }
+	 
+	 
+	 public void insertLastMacAddressLocation(String macAddress, String latitude, String longitude, String zone, String building, String floor){
+		 String insertSql = "INSERT INTO LastMacLocation (macAddress, latitude, longitude, zone, building, floor)"
+	        		+ " VALUES(?,?,?,?,?,?)";
+		 String updateSql = "UPDATE LastMacLocation set latitude = ?, longitude = ?, zone = ?, building = ?, floor = ? where macAddress = ?";
 		 String selectSql = "Select count(*) from LastMacLocation WHERE macAddress = ?";
 		 
 		 try(Connection conn = this.connect();
@@ -123,15 +127,19 @@ public class DatabaseWriter {
 				// set the preparedstatement parameters
 				 updateStatement.setString(1,latitude);
 				 updateStatement.setString(2,longitude);
-				 updateStatement.setString(3, floor);
-				 updateStatement.setString(4, macAddress);
+				 updateStatement.setString(3, zone);
+				 updateStatement.setString(4, building);
+				 updateStatement.setString(5, floor);
+				 updateStatement.setString(6, macAddress);
 				 updateStatement.executeUpdate();
 			 }
 			 else {
 				 insertStatement.setString(1, macAddress);
 				 insertStatement.setString(2, latitude);
 				 insertStatement.setString(3, longitude);
-				 insertStatement.setString(4, floor);
+				 insertStatement.setString(4, zone);
+				 insertStatement.setString(5, building);
+				 insertStatement.setString(6, floor);
 				 insertStatement.executeUpdate();
 			 }
 			 

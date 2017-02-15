@@ -15,21 +15,21 @@ public class JobMacAddressLocation {
 	public void execute() throws Exception{
 		macAddressLocationManager.syncMacAddressLocation();
 		MacAddressLocation desiredLocation = macAddressLocationManager.getMacAddressLocation();
-		String locationInformation = desiredLocation.getFloor() + "\t"
-				+ desiredLocation.getGeoCoordinate().getLatitude() + "\t"
-				+ desiredLocation.getGeoCoordinate().getLongitude();
-//		System.out.println(locationInformation);
+		
+		floorConverter.convert(desiredLocation.getFloor());
 		
 		macAddressLocationWriter.insertMacAddressLocation(MacAddressLocationManager.getMacaddress(),
 				desiredLocation.getGeoCoordinate().getLatitude().toString(),
 				desiredLocation.getGeoCoordinate().getLongitude().toString(),
-				desiredLocation.getFloor());
+				floorConverter.getConvertZone(),
+				floorConverter.getConvertBuilding(),
+				floorConverter.getConvertFloor());
 		
 		macAddressLocationWriter.insertLastMacAddressLocation(MacAddressLocationManager.getMacaddress(),
 				desiredLocation.getGeoCoordinate().getLatitude().toString(),
 				desiredLocation.getGeoCoordinate().getLongitude().toString(),
-				desiredLocation.getFloor());
-		
-		System.out.println(floorConverter.convert(desiredLocation.getFloor()));
+				floorConverter.getConvertZone(),
+				floorConverter.getConvertBuilding(),
+				floorConverter.getConvertFloor());
 	}
 }
