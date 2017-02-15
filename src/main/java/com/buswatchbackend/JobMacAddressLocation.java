@@ -6,6 +6,8 @@ public class JobMacAddressLocation {
 	private MacAddressLocationManager macAddressLocationManager;
 	private Date now;
 	private DatabaseWriter macAddressLocationWriter = new DatabaseWriter();
+	private MacAddressLocationFloorConverter floorConverter = new MacAddressLocationFloorConverter();
+	
 	public JobMacAddressLocation(String token) throws Exception{
 		macAddressLocationManager = new MacAddressLocationManager(token);	
 	}
@@ -27,6 +29,7 @@ public class JobMacAddressLocation {
 				desiredLocation.getGeoCoordinate().getLatitude().toString(),
 				desiredLocation.getGeoCoordinate().getLongitude().toString(),
 				desiredLocation.getFloor());
-	
+		
+		System.out.println(floorConverter.convert(desiredLocation.getFloor()));
 	}
 }
