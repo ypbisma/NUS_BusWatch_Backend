@@ -24,10 +24,31 @@ public class DatabaseWriter {
 	 public void insertBusInformation(String nodeId, String vehicleSerial, String gpsTime, String latitude, String longitude, String heading) {
 	        String sql = "INSERT INTO BusInformation (nodeId, vehicleSerial, gpsTime, latitude, longitude, heading)"
 	        		+ " VALUES(?,?,?,?,?,?)";
-	 
+	        String lastNodeId = null;
+	        String lastVehicleSerial = null;
+	        String lastLatitude = null;
+	        String lastLongitude = null;
+	        String lastHeading = null;
+	        
+	        
 	        try (Connection conn = this.connect();
 	           	PreparedStatement pstmt = conn.prepareStatement(sql);)
 	        {
+	        	Statement statement = conn.createStatement();
+	        	ResultSet res = statement.executeQuery("SELECT * FROM BusInformation");
+	        	
+	        	while(res.next()){
+	        		
+	        		lastNodeId = res.getString("nodeId");
+	        		lastVehicleSerial = res.getString("vehicleSerial");
+	        		lastLatitude = res.getString("Latitude");
+	        		lastLongitude = res.getString("Longitude");
+	        		lastHeading = res.getString("Heading");
+	        	}
+	        	if (lastNodeId == nodeId){
+	        		System.out.println("SameId");
+	        	}
+	        	
 	        	pstmt.setString(1, nodeId);
 	        	pstmt.setString(2, vehicleSerial);
 	        	pstmt.setString(3, gpsTime);
