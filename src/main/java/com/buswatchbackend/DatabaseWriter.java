@@ -45,9 +45,13 @@ public class DatabaseWriter {
 	        		lastLongitude = res.getString("Longitude");
 	        		lastHeading = res.getString("Heading");
 	        	}
-	        	if (lastNodeId == nodeId){
+	        	System.out.println(lastNodeId + "vs" + nodeId);
+	        	if (lastNodeId.equalsIgnoreCase(nodeId)){
 	        		System.out.println("SameId");
 	        	}
+	        	//when all the 'last' strings are the same as the incoming variables 'non-last' strings,
+	        	//then do not key in all the info
+	        	//except for GPS time, becos GPS Time changes
 	        	
 	        	pstmt.setString(1, nodeId);
 	        	pstmt.setString(2, vehicleSerial);

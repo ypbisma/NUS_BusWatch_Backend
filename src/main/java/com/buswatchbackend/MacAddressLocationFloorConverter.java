@@ -191,8 +191,11 @@ public class MacAddressLocationFloorConverter {
 		default:
 			break;
 		}
-		
-		convertFloor = inputFloor.split("-")[2];
+		if (inputFloor.split("-").length >= 3){
+			convertFloor = inputFloor.split("-")[2];
+		} else {
+			convertFloor = inputFloor;
+		}
 		
 	}
 	
