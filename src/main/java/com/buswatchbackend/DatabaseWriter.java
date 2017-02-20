@@ -211,7 +211,7 @@ public class DatabaseWriter {
 	
 	public void insertDeviceCount(String zone, String building, String floor, String deviceCount) {
 		String insertSql = "INSERT INTO DeviceCount (zone, building, floor, count)" + " VALUES(?,?,?,?)";
-		String updateSql = "UPDATE DeviceCount set count = ? where floor = ?";
+		String updateSql = "UPDATE DeviceCount set count = ? WHERE floor = ?";
 		String selectSql = "Select count(*) from DeviceCount WHERE floor = ?";
 
 		try (Connection conn = this.connect();
@@ -233,6 +233,7 @@ public class DatabaseWriter {
 				updateStatement.executeUpdate();
 			}
 			else {
+				
 				insertStatement.setString(1, zone);
 				insertStatement.setString(2, building);
 				insertStatement.setString(3, floor);
