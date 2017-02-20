@@ -9,7 +9,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-
 import com.google.gson.Gson;
 
 public class BusLocationManager {
@@ -18,47 +17,45 @@ public class BusLocationManager {
 	private String busLocationUrl;
 	private String busInfo;
 	private BusLocation[] busLocationList;
-	
-	public BusLocationManager(String token){
-		this.busLocationUrl = API_URL+VENIAM_LOCATION_BRANCH+token;
-		
-	}
-	
-	public void syncBusInfo() throws Exception{
-		try{
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpGet request = new HttpGet(this.busLocationUrl);
-		
-		HttpResponse response = client.execute(request);
-		
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(response.getEntity().getContent()));
-		
-		StringBuffer result = new StringBuffer();
-		
-		String line = "";
-		
-		while ((line = reader.readLine())!= null){
-			result.append(line);
-		}
-		
-		this.setBusInfo(result.toString());
-		
-		Gson gson = new Gson();
-			this.setBusLocationList(gson.fromJson(result.toString(), BusLocation[].class));
-	}
-	catch(UnknownHostException e){
-		System.out.println("no internet connection!");
-	}
-	catch(Exception e){
-		e.printStackTrace();
-	}
-}
 
-	//setters and getters
+	public BusLocationManager(String token) {
+		this.busLocationUrl = API_URL + VENIAM_LOCATION_BRANCH + token;
+
+	}
+
+	public void syncBusInfo() throws Exception {
+		try {
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpGet request = new HttpGet(this.busLocationUrl);
+
+			HttpResponse response = client.execute(request);
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+			StringBuffer result = new StringBuffer();
+
+			String line = "";
+
+			while ((line = reader.readLine()) != null) {
+				result.append(line);
+			}
+
+			this.setBusInfo(result.toString());
+
+			Gson gson = new Gson();
+			this.setBusLocationList(gson.fromJson(result.toString(), BusLocation[].class));
+		} catch (UnknownHostException e) {
+			System.out.println("no internet connection!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// setters and getters
 	public void setBusInfo(String busInfo) {
 		this.busInfo = busInfo;
 	}
+
 	public String getBusInfo() {
 		return busInfo;
 	}

@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName;
 public class BusSession {
 	@SerializedName("session_id")
 	private String sessionId;
-	
+
 	@SerializedName("mac_hash")
 	private String macHash;
-	
+
 	@SerializedName("gw_id")
 	private Integer gwId;
-	
+
 	@SerializedName("latitude_begin")
 	private Double latitudeBegin;
-	
+
 	@SerializedName("longitude_begin")
 	private Double longitudeBegin;
 

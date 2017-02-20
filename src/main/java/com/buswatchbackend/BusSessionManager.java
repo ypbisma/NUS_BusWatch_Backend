@@ -59,6 +59,7 @@ public class BusSessionManager {
 	public void setBusSession(String busSession) {
 		this.busSession = busSession;
 	}
+
 	public String getBusSession() {
 		return busSession;
 	}
