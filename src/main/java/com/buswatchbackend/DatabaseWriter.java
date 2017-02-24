@@ -1,5 +1,9 @@
 package com.buswatchbackend;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,7 +11,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.formula.functions.Column;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class DatabaseWriter {
 	private Connection connect() {
@@ -277,30 +292,81 @@ public class DatabaseWriter {
 			String sql = "SELECT * from ZoneBuildingFloor";
 			ResultSet res;
 			res = stmt.executeQuery(sql);
-			
+
 			while (res.next()) {
 				ZoneBuildingFloor zoneBuildingFloorItem = new ZoneBuildingFloor(res.getString("zone"),
 						res.getString("building"), res.getString("floor"));
 				zoneBuildingFloorList.add(zoneBuildingFloorItem);
 			}
-			
+
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		return zoneBuildingFloorList;
 	}
-	
-	public void  writeExcelFile(){
-		try (Connection conn = this.connect();
-				Statement st = conn.createStatement();){
-			ResultSet rs = st.executeQuery("Select * from DeviceCount");
-			
-			//HSSFWorkbook wb = new HSSFWorkbook();
-			
-				
-			
-			
-		} catch (SQLException e){
+
+	public void writeExcelFile() throws Exception {
+		try (Connection conn = this.connect(); Statement st = conn.createStatement();) {
+			String excelFilePath = "/Users/Bisma/AndroidStudioProjects/BusWatch_Backend/ExcelFiles/DeviceCount.xls";
+			File file = new File(excelFilePath);
+			FileInputStream inputStream = new FileInputStream(file);
+			HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+
+			if (file.exists() && !file.isDirectory()) {
+				ResultSet rs = st.executeQuery("Select * from DeviceCount");
+
+				HSSFSheet firstSheet = workbook.getSheetAt(0);
+				int lastColumn = firstSheet.getRow(1).getLastCellNum();
+
+				lastColumn++;
+
+				Integer i = 1;
+
+				while (rs.next()) {
+					HSSFRow currentRow = firstSheet.getRow(i);
+					currentRow.createCell(lastColumn + 1).setCellValue(rs.getString(4));
+					i++;
+
+				}
+
+				FileOutputStream fileOut = new FileOutputStream(
+						"/Users/Bisma/AndroidStudioProjects/BusWatch_Backend/ExcelFiles/DeviceCount.xls");
+				workbook.write(fileOut);
+				fileOut.close();
+				workbook.close();
+
+			} else {
+				System.out.println("here");
+				ResultSet rs = st.executeQuery("Select * from DeviceCount");
+
+				HSSFWorkbook wb = new HSSFWorkbook();
+				HSSFSheet sheet = wb.createSheet("Device Count");
+				HSSFRow rowHead = sheet.createRow((short) 0);
+				rowHead.createCell((short) 0).setCellValue("Zone");
+				rowHead.createCell((short) 1).setCellValue("Building");
+				rowHead.createCell((short) 2).setCellValue("Floor");
+				rowHead.createCell((short) 3).setCellValue("Count");
+
+				int index = 1;
+				while (rs.next()) {
+
+					HSSFRow newRow = sheet.createRow((short) index);
+					newRow.createCell((short) 0).setCellValue(rs.getString(1));
+					newRow.createCell((short) 1).setCellValue(rs.getString(2));
+					newRow.createCell((short) 2).setCellValue(rs.getString(3));
+					newRow.createCell((short) 3).setCellValue(rs.getString(4));
+					index++;
+				}
+				FileOutputStream fileOut = new FileOutputStream(
+						"/Users/Bisma/AndroidStudioProjects/BusWatch_Backend/ExcelFiles/DeviceCount.xls");
+				wb.write(fileOut);
+				fileOut.close();
+				rs.close();
+
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
 	}

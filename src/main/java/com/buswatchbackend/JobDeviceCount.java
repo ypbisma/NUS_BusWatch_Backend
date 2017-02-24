@@ -57,6 +57,13 @@ public class JobDeviceCount {
 	public void writeDeviceCount() {
 		deviceCountWriter.insertDeviceCount(deviceCountManager.getZoneName(), deviceCountManager.getBuildingName(),
 				deviceCountManager.getFloorName(), deviceCountManager.getDeviceCount().getCount().toString());
+		
+		try {
+			deviceCountWriter.writeExcelFile();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void writeZoneBuildingFloor(String zone, String building, String floor) {
