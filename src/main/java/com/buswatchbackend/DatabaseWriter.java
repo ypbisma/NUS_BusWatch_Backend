@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
 
 public class DatabaseWriter {
 	private Connection connect() {
@@ -34,8 +36,7 @@ public class DatabaseWriter {
 		String lastLongitude = null;
 		String lastHeading = null;
 
-		try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(insertSql);) 
-		{
+		try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(insertSql);) {
 			Statement statement = conn.createStatement();
 			ResultSet res = statement.executeQuery("SELECT * FROM BusInformation");
 
@@ -206,9 +207,9 @@ public class DatabaseWriter {
 			System.out.println(e.getMessage());
 		}
 	}
-	
-	//DEVICE COUNT
-	
+
+	// DEVICE COUNT
+
 	public void insertDeviceCount(String zone, String building, String floor, String deviceCount) {
 		String insertSql = "INSERT INTO DeviceCount (zone, building, floor, count)" + " VALUES(?,?,?,?)";
 		String updateSql = "UPDATE DeviceCount set count = ? WHERE floor = ?";
@@ -218,29 +219,88 @@ public class DatabaseWriter {
 				PreparedStatement updateStatement = conn.prepareStatement(updateSql);
 				PreparedStatement selectStatement = conn.prepareStatement(selectSql);
 				PreparedStatement insertStatement = conn.prepareStatement(insertSql);) {
-			
+
 			int count = 0;
 			selectStatement.setString(1, floor);
 			ResultSet resultSet = selectStatement.executeQuery();
 			if (resultSet.next()) {
 				count = resultSet.getInt(1);
 			}
-			
+
 			if (count > 0) {
 				// set the preparedstatement parameters
 				updateStatement.setString(1, deviceCount);
 				updateStatement.setString(2, floor);
 				updateStatement.executeUpdate();
-			}
-			else {
-				
+			} else {
+
 				insertStatement.setString(1, zone);
 				insertStatement.setString(2, building);
 				insertStatement.setString(3, floor);
-				insertStatement.setString(4, deviceCount );
+				insertStatement.setString(4, deviceCount);
 				insertStatement.executeUpdate();
 			}
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void insertZoneBuildingFloor(String zone, String building, String floor) {
+		String insertSql = "INSERT INTO ZoneBuildingFloor (zone, building, floor)" + " VALUES(?,?,?)";
+		String selectSql = "Select count(*) from ZoneBuildingFloor WHERE floor = ?";
+
+		try (Connection conn = this.connect();
+				PreparedStatement insertStatement = conn.prepareStatement(insertSql);
+				PreparedStatement selectStatement = conn.prepareStatement(selectSql);) {
+			int count = 0;
+			selectStatement.setString(1, floor);
+			ResultSet resultSet = selectStatement.executeQuery();
+			if (resultSet.next()) {
+				count = resultSet.getInt(1);
+			}
+			if (count <= 0) {
+				insertStatement.setString(1, zone);
+				insertStatement.setString(2, building);
+				insertStatement.setString(3, floor);
+				insertStatement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public ArrayList<ZoneBuildingFloor> getZoneBuildingFloor() {
+		ArrayList<ZoneBuildingFloor> zoneBuildingFloorList = new ArrayList<>();
+		try (Connection conn = this.connect();) {
+			Statement stmt;
+			stmt = conn.createStatement();
+			String sql = "SELECT * from ZoneBuildingFloor";
+			ResultSet res;
+			res = stmt.executeQuery(sql);
+			
+			while (res.next()) {
+				ZoneBuildingFloor zoneBuildingFloorItem = new ZoneBuildingFloor(res.getString("zone"),
+						res.getString("building"), res.getString("floor"));
+				zoneBuildingFloorList.add(zoneBuildingFloorItem);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return zoneBuildingFloorList;
+	}
+	
+	public void  writeExcelFile(){
+		try (Connection conn = this.connect();
+				Statement st = conn.createStatement();){
+			ResultSet rs = st.executeQuery("Select * from DeviceCount");
+			
+			//HSSFWorkbook wb = new HSSFWorkbook();
+			
+				
+			
+			
+		} catch (SQLException e){
 			System.out.println(e.getMessage());
 		}
 	}

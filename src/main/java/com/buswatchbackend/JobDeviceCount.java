@@ -1,5 +1,6 @@
 package com.buswatchbackend;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class JobDeviceCount {
@@ -15,6 +16,8 @@ public class JobDeviceCount {
 	private Integer j;
 	private Integer k;
 
+	private ArrayList<ZoneBuildingFloor> zoneBuildingFloorList = new ArrayList<>();
+
 	private DatabaseWriter deviceCountWriter = new DatabaseWriter();
 
 	public JobDeviceCount(String token) throws Exception {
@@ -23,31 +26,32 @@ public class JobDeviceCount {
 	}
 
 	public void execute() throws Exception {
-		deviceCountManager.syncZoneList();
-		allZones = deviceCountManager.getZoneList();
-		
-		for (i = 0; i < 2; i++) {
-			zoneName = allZones[3];
-			
-			deviceCountManager.syncBuildingList(zoneName);
-			allBuildings = deviceCountManager.getBuildingList();
-			for (j = 0; j < allBuildings.length; j++) {
-				buildingName = allBuildings[j];
-				deviceCountManager.syncFloorList(zoneName, buildingName);
-				allFloors = deviceCountManager.getFloorList();
-				for (k = 0; k < allFloors.length; k++) {
-					floorName = allFloors[k];
-					
-					deviceCountManager.setZoneName(zoneName);
-					deviceCountManager.setBuildingName(buildingName);
-					deviceCountManager.setFloorName(floorName);
-					System.out.println(zoneName + buildingName + floorName);
-					deviceCountManager.syncDeviceCount();
-					writeDeviceCount();
-				}
-			}
-			
+
+		zoneBuildingFloorList = deviceCountWriter.getZoneBuildingFloor();
+		for (ZoneBuildingFloor item : zoneBuildingFloorList) {
+			deviceCountManager.setZoneName(item.getZone());
+			deviceCountManager.setBuildingName(item.getBuilding());
+			deviceCountManager.setFloorName(item.getFloor());
+			deviceCountManager.syncDeviceCount();
+			writeDeviceCount();
 		}
+
+		// deviceCountManager.syncZoneList();
+		// allZones = deviceCountManager.getZoneList();
+		// for (String i: allZones) {
+		// zoneName = i;
+		// System.out.println("here");
+		// deviceCountManager.syncBuildingList(zoneName);
+		// allBuildings = deviceCountManager.getBuildingList();
+		// for (String j: allBuildings) {
+		// buildingName = j;
+		// deviceCountManager.syncFloorList(zoneName, buildingName);
+		// allFloors = deviceCountManager.getFloorList();
+		//
+		// for (String k : allFloors) {
+		// writeZoneBuildingFloor(zoneName, buildingName, k);
+		// }
+		// }
 	}
 
 	public void writeDeviceCount() {
@@ -55,4 +59,7 @@ public class JobDeviceCount {
 				deviceCountManager.getFloorName(), deviceCountManager.getDeviceCount().getCount().toString());
 	}
 
+	public void writeZoneBuildingFloor(String zone, String building, String floor) {
+		deviceCountWriter.insertZoneBuildingFloor(zone, building, floor);
+	}
 }

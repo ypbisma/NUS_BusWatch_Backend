@@ -12,6 +12,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import com.google.gson.Gson;
 
 public class DeviceCountManager {
+	
+	
 	private static final String API_URL = "https://api.ami-lab.org";
 	// DEVICE COUNT
 	private String zoneName;
@@ -35,7 +37,7 @@ public class DeviceCountManager {
 	private String[] buildingList;
 	private String[] floorList;
 
-	private static String token;
+	private String token;
 
 	public DeviceCountManager(String token) {
 		this.token = token;
