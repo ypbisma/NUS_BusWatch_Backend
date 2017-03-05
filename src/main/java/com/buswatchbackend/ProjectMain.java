@@ -2,7 +2,6 @@ package com.buswatchbackend;
 
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 import static org.quartz.JobBuilder.*;
@@ -12,6 +11,9 @@ import static org.quartz.SimpleScheduleBuilder.*;
 public class ProjectMain {
 
 	public static void main(String[] args) throws Exception {
+		DatabaseManager databaseManager = new DatabaseManager();
+		databaseManager.emptyDatabase();
+		
 		try {
 			// Grab the Scheduler instance from the Factory
 			Scheduler scheduler1 = StdSchedulerFactory.getDefaultScheduler();
@@ -28,22 +30,6 @@ public class ProjectMain {
 
 			// and start it off
 			scheduler1.start();
-
-			// Grab the Scheduler instance from the Factory
-			Scheduler scheduler2 = StdSchedulerFactory.getDefaultScheduler();
-
-			// define the job and tie it to our MyJob class
-			JobDetail job2 = newJob(UpdateDeviceCountJob.class).withIdentity("job2", "group2").build();
-
-			// Trigger the job to run now, and then repeat every 40 seconds
-			Trigger trigger2 = newTrigger().withIdentity("trigger2", "group2").startNow()
-					.withSchedule(simpleSchedule().withIntervalInSeconds(120).repeatForever()).build();
-
-			// Tell quartz to schedule the job using our trigger
-			scheduler2.scheduleJob(job2, trigger2);
-
-			// and start it off
-			scheduler2.start();
 
 		} catch (NullPointerException e) {
 			System.out.println("array is empty!");

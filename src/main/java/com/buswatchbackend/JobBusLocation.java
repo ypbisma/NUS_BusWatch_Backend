@@ -5,8 +5,7 @@ import java.util.Vector;
 public class JobBusLocation {
 	private BusLocationManager busLocationManager;
 	private Vector<BusLocation> desiredBusLocationList = new Vector<BusLocation>();
-	private String output;
-	private DatabaseWriter busLocationWriter = new DatabaseWriter();
+	private DatabaseManager busLocationWriter = new DatabaseManager();
 
 	public JobBusLocation(String token) throws Exception {
 
@@ -22,8 +21,6 @@ public class JobBusLocation {
 	}
 
 	public void writeBusInfoList(BusLocation[] busInfoList) {
-		String Output;
-
 		BusLocation lastBusLocation = new BusLocation();
 
 		for (BusLocation busLocation : busInfoList) {

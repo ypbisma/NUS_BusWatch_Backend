@@ -14,9 +14,10 @@ public class MacAddressLocationManager {
 
 	private static final String API_URL = "https://api.ami-lab.org";
 	private static final String MAC_ADDRESS_DIRECTORY = "/api/v1/cisco/device/mac/";
-	//private static final String macAddress = "10:A5:D0:24:1A:9F";// BismaSmartphone
-	private static final String macAddress = "a8:bb:cf:07:f2:20";//Nia
-	// private static final String macAddress = "a8:bb:cf:05:07:76";// Bisma
+	 private static final String macAddress = "10:A5:D0:24:1A:9F";//
+	// BismaSmartphone
+//	private static final String macAddress = "a8:bb:cf:07:f2:20";// Nia
+//	 private static final String macAddress = "a8:bb:cf:05:07:76";// Bisma
 
 	private String macAddressUrl;
 	private String macAddressData;
@@ -47,6 +48,9 @@ public class MacAddressLocationManager {
 			this.setMacAddressData(result.toString());
 
 			Gson gson = new Gson();
+			if (gson.toString().equals("{}")){
+				System.out.println("object is empty");
+			}
 			this.setMacAddressLocation(gson.fromJson(result.toString(), MacAddressLocation.class));
 		} finally {
 			//

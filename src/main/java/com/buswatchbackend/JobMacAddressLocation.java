@@ -1,11 +1,9 @@
 package com.buswatchbackend;
 
-import java.util.Date;
 
 public class JobMacAddressLocation {
 	private MacAddressLocationManager macAddressLocationManager;
-	private Date now;
-	private DatabaseWriter macAddressLocationWriter = new DatabaseWriter();
+	private DatabaseManager macAddressLocationWriter = new DatabaseManager();
 	private MacAddressLocationFloorConverter floorConverter = new MacAddressLocationFloorConverter();
 
 	public JobMacAddressLocation(String token) throws Exception {
